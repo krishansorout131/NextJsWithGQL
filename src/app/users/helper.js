@@ -1,17 +1,17 @@
 'use server'
 import { client } from '../../lib/graphqlClient';
 
-export const getUsersData = async (query) => {
-  const variables = { businessId: 47 }
+export async function getUsersData(query, { businessId, page = 1, perPage = 10 }) {
+  const offset = (page - 1) * perPage;
 
-  let data = []
-  try {
-    data = await client.request(query, variables)
-  } catch (error) {
-    console.log("error fetching users")
-  }
+  const variables = {
+    businessId: parseInt(businessId),
+    limit: perPage,
+    offset: offset,
+  };
 
-  return data
+  const response = await client.request(query, variables);
+  return response;
 }
 
 export const getUserData = async (query, variables) => {
@@ -30,6 +30,7 @@ export const updateUser = async (query, variables) => {
     const data = await client.request(query, variables);
 
     const updatedUsers = data?.update_business_users?.returning || [];
+    console.log(data?.update_business_users)
 
     if (updatedUsers.length > 0) {
       return { success: true, user: updatedUsers[0] };

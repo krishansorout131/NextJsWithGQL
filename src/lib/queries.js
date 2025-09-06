@@ -1,10 +1,21 @@
-// lib/queries.js
 export const GET_USERS = `
-  query GetUsers($businessId: Int!) {
-    business_users(where: { deleted: { _eq: false }, business_id: { _eq: $businessId } }) {
+  query GetUsers($businessId: Int!, $limit: Int!, $offset: Int!) {
+    business_users(
+      where: { deleted: { _eq: false }, business_id: { _eq: $businessId } }
+      limit: $limit
+      offset: $offset
+    ) {
       id
       full_name
       email
+      business_id
+    }
+    business_users_aggregate(
+      where: { deleted: { _eq: false }, business_id: { _eq: $businessId } }
+    ) {
+      aggregate {
+        count
+      }
     }
   }
 `;
@@ -12,6 +23,16 @@ export const GET_USERS = `
 export const getBusinessesQuery = `
   query fetchBusinesses {
     businesses {
+      id
+      name
+      subdomain
+    }
+  }
+`;
+
+export const getBusinessDetailsQuery = `
+  query fetchBusinessDetails($id: Int!) {
+    businesses(where: { id: { _eq: $id } }) {
       id
       name
       subdomain
@@ -44,6 +65,7 @@ export const updateUserQuery = `
       where: { id: { _eq: $id } }, 
       _set: { full_name: $name }
     ) {
+      affected_rows
       returning {
         id
         full_name
