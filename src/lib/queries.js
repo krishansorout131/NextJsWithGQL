@@ -1,11 +1,21 @@
-// lib/queries.js
 export const GET_USERS = `
-  query GetUsers($businessId: Int!) {
-    business_users(where: { deleted: { _eq: false }, business_id: { _eq: $businessId } }) {
+  query GetUsers($businessId: Int!, $limit: Int!, $offset: Int!) {
+    business_users(
+      where: { deleted: { _eq: false }, business_id: { _eq: $businessId } }
+      limit: $limit
+      offset: $offset
+    ) {
       id
       full_name
       email
       business_id
+    }
+    business_users_aggregate(
+      where: { deleted: { _eq: false }, business_id: { _eq: $businessId } }
+    ) {
+      aggregate {
+        count
+      }
     }
   }
 `;
