@@ -1,9 +1,7 @@
 'use server'
 import { client } from '../../lib/graphqlClient';
 
-export const getUsersData = async (query) => {
-  const variables = { businessId: 47 }
-
+export const getUsersData = async (query, variables) => {
   let data = []
   try {
     data = await client.request(query, variables)
@@ -30,6 +28,7 @@ export const updateUser = async (query, variables) => {
     const data = await client.request(query, variables);
 
     const updatedUsers = data?.update_business_users?.returning || [];
+    console.log(data?.update_business_users)
 
     if (updatedUsers.length > 0) {
       return { success: true, user: updatedUsers[0] };

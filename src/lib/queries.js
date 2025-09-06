@@ -5,6 +5,7 @@ export const GET_USERS = `
       id
       full_name
       email
+      business_id
     }
   }
 `;
@@ -12,6 +13,16 @@ export const GET_USERS = `
 export const getBusinessesQuery = `
   query fetchBusinesses {
     businesses {
+      id
+      name
+      subdomain
+    }
+  }
+`;
+
+export const getBusinessDetailsQuery = `
+  query fetchBusinessDetails($id: Int!) {
+    businesses(where: { id: { _eq: $id } }) {
       id
       name
       subdomain
@@ -44,6 +55,7 @@ export const updateUserQuery = `
       where: { id: { _eq: $id } }, 
       _set: { full_name: $name }
     ) {
+      affected_rows
       returning {
         id
         full_name

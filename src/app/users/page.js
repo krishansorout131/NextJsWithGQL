@@ -2,8 +2,12 @@ import { getUsersData } from './helper'
 import { GET_USERS } from '../../lib/queries';
 import Link from 'next/link'
 
-export default async function Page() {
-  const data = await getUsersData(GET_USERS)  
+export default async function Page({ searchParams }) {  
+  const params = await searchParams;
+
+  const businessId = params.businessId;
+
+  const data = await getUsersData(GET_USERS, { businessId: businessId });
 
   return(
     <div>
